@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'amazon_analysis.views.home', name='home'),
+    url(r'^$', 'amazon_analysis.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^category/', include('category.urls', namespace="category")),
     url(r'^admin/', include(admin.site.urls)),

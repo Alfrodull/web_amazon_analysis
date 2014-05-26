@@ -63,6 +63,12 @@ DATABASES = {
     }
 }
 
+
+TEMPLATE_DIRS = (  
+
+    # Don't forget to use absolute paths, not relative paths.  
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),  
+) 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
