@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>统计图表展示</title>
+		<meta charset=utf-8>   
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+	</head>
+
+	<body>
+
+		<h3>
+			{{ cate_name }}
+		</h3>
+
+
+ 		<div id="star_pie" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+ 		<div id="rev_count_hist" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+ 		<div id="avgstar_hist" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+		<script type="text/javascript">
+var rate = {{ star_num }};
+
+$(function () {
+    var star_pie = new Highcharts.Chart({
+        chart: {
+            renderTo: 'star_pie',
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '商品评分饼状图'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+        	percentageDecimals: 1
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    formatter: function() {
+                        return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '所占百分比',
+            data: [
+                ['五星', rate[0] ],
+                {
+                    name: '四星',
+                    y: rate[1],
+                    sliced: true,
+                    selected: true
+                },
+                ['三星',  rate[2] ],
+                ['两星',  rate[3] ],
+                ['一星',  rate[4] ]
+            ]
+        }]
+    });
+});
+
+
+		</script>
+
+
+		<script type="text/javascript">
+var asin_list = {{ asin_list|safe }};
+var rev_count_list = {{ rev_count_list }};
+$(function () {
+		
+        var revNoHist = new Highcharts.Chart({
+            chart: {
+                renderTo: 'rev_count_hist',
+                type: 'column'
+            },
+            title: {
+                text: '商品评论数柱状图'
+            },
+            xAxis: {
+                categories: asin_list
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '评分人次'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.lf} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '评论数',
+                data: rev_count_list
+    
+            }]
+        });
+    });
+
+
+		</script>
+
+
+		<script type="text/javascript">
+
+var avgstar_list = {{ avgstar_list }};
+
+$(function () {
+		
+        var avgstarHist = new Highcharts.Chart({
+            chart: {
+                renderTo: 'avgstar_hist',
+                type: 'column'
+            },
+            title: {
+                text: '商品平均评分柱状图'
+            },
+            xAxis: {
+                categories: asin_list
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '平均评分'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.lf} 分</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '评分',
+                data: avgstar_list
+    
+            }]
+        });
+    });		
+		</script>
+
+	</body>
+</html>
