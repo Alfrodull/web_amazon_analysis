@@ -3,7 +3,7 @@ import simplejson as json
 import urllib
 from category import datahelper
 
-# Create your views here.
+
 def index(request):
 	target_url = 'http://112.124.1.3:8004/api/commodity/'
 	category_list = json.loads(urllib.urlopen(target_url).read())
