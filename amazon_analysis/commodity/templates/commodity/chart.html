@@ -1,1 +1,179 @@
-<H2> {{ asin }} </H2>
+{% if asin %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> {{ asin }} </title>
+		<meta charset=utf-8>   
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		
+	</head>
+
+	<body>
+		<H2>商品名称: {{ com_name }} </H2>
+		<p><a href="{{ zlink }}">details in amazon</a></p>
+
+ 		<div id="star_hist" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+		<div id="price_line" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+		</div>
+		
+		<div id="review_time_line" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+		<script type="text/javascript">
+var star_list = {{ star_sum }}
+$(function () {
+		
+        var starHist = new Highcharts.Chart({
+            chart: {
+                renderTo: 'star_hist',
+                type: 'column'
+            },
+            title: {
+                text: '商品评分柱状图'
+            },
+            xAxis: {
+                categories: [
+                    '五星',
+                    '四星',
+                    '三星',
+                    '两星',
+                    '一星',
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '评分人次'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.lf} 人次</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '评分',
+                data: star_list
+    
+            }]
+        });
+    });			
+
+var date_list = {{ date_list|safe }}
+var price_list = {{ price_list }}
+$(function () {
+        var priceLine = new Highcharts.Chart({
+            chart: {
+                renderTo: 'price_line',
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '价格-日期折线图',
+                x: -20 //center
+            },
+            xAxis: {
+                categories: date_list
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '商品价格'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +':</b> $'+
+                         Highcharts.numberFormat(this.y, 0);
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: '价格走势',
+                data: price_list
+            }]
+        });
+    });
+
+var date_li2 = {{ date_li2|safe }}
+var count_list = {{ count_list }}
+$(function () {
+        var reviwTLine = new Highcharts.Chart({
+            chart: {
+                renderTo: 'review_time_line',
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '评论-日期折线图',
+                x: -20 //center
+            },
+            xAxis: {
+                categories: date_li2
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '评论数量'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +':</b>'+
+                         Highcharts.numberFormat(this.y, 0) + '个评论';
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: '评论增量走势',
+                data: count_list
+            }]
+        });
+    });
+
+		</script>
+
+
+	</body>
+</html>
+{% else %}
+<p> asin is not correct  </p>
+{% endif %}
